@@ -1,0 +1,17 @@
+{
+  "display_name": "砚台 · 界面整理",
+  "loading_order": 110,
+  "requires": [],
+  "optional": [],
+  "js": "index.js",
+  "css": "style.css",
+  "author": "阿砚 × 泊舟（Codex）",
+  "version": "0.2.2",
+  "minimum_client_version": "1.16.0",
+  "auto_update": false,
+  "hooks": {
+    "enable": "onEnable",
+    "disable": "onDisable"
+  },
+  "homePage": "https://github.com/ayan-atelier/yantai-interface"
+}
