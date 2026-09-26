@@ -1,0 +1,50 @@
+.yt-plugin-dialog {
+ --yt-bg:var(--SmartThemeBlurTintColor,#202224); --yt-panel:rgba(127,127,127,.07);
+ --yt-text:var(--SmartThemeBodyColor,#ece8e0); --yt-muted:var(--SmartThemeEmColor,#afa99f);
+ --yt-accent:var(--SmartThemeQuoteColor,#c8b994); --yt-accent-soft:rgba(170,150,110,.13);
+ --yt-line:var(--SmartThemeBorderColor,rgba(170,170,170,.24)); --yt-radius:12px;
+ --yt-serif:inherit; --yt-font:var(--mainFontFamily,inherit);
+ color:var(--yt-text); background:var(--yt-bg); font:inherit; font-family:var(--yt-font);
+ border:1px solid var(--yt-line); border-radius:16px; padding:0;
+ width:min(900px,calc(100vw - 24px)); max-width:calc(100vw - 24px);
+ max-height:calc(100vh - 32px); max-height:calc(100dvh - 32px); margin:auto;
+ box-shadow:0 16px 64px #0005; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+ overflow:hidden; text-align:left;
+}
+.yt-plugin-dialog[open] { display:flex; flex-direction:column; }
+.yt-plugin-dialog::backdrop { background:rgba(0,0,0,.5); }
+.yt-plugin-header { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px 24px; border-bottom:1px solid var(--yt-line); flex:none; }
+.yt-plugin-header small { color:var(--yt-muted); font-size:12px; letter-spacing:.06em; }
+.yt-plugin-header h2 { margin:4px 0 0; color:inherit; font-size:1.35em; }
+.yt-plugin-content { padding:22px 24px; overflow:auto; min-height:0; overscroll-behavior:contain; scrollbar-gutter:stable; }
+.yt-plugin-dialog * { box-sizing:border-box; }
+.yt-plugin-dialog p { line-height:1.65; }
+.yt-plugin-dialog .yt-button,.yt-plugin-settings .yt-button { font:inherit; color:inherit; background:transparent; border:1px solid var(--yt-line,var(--SmartThemeBorderColor,#7775)); border-radius:8px; min-height:44px; padding:9px 14px; cursor:pointer; margin:0; }
+.yt-plugin-dialog .yt-button:hover { background:var(--yt-panel); }
+.yt-plugin-dialog .yt-button:disabled { opacity:.55; cursor:not-allowed; }
+.yt-plugin-dialog .yt-button-primary { border-color:var(--yt-accent); background:var(--yt-accent-soft); }
+.yt-plugin-dialog .yt-plugin-close { min-width:44px; font-size:24px; line-height:1; padding:8px; }
+.yt-plugin-dialog .yt-muted { color:var(--yt-muted); font-size:.9em; }
+.yt-plugin-dialog .yt-notice { padding:12px 14px; border:1px solid var(--yt-line); border-radius:var(--yt-radius); background:var(--yt-panel); }
+.yt-plugin-dialog .yt-section { margin:0 0 22px; padding-bottom:18px; border-bottom:1px solid var(--yt-line); }
+.yt-plugin-dialog .yt-section-title { font-size:1.06em; margin:0 0 10px; }
+.yt-plugin-dialog .yt-inline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.yt-plugin-dialog .yt-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.yt-plugin-dialog .yt-field { display:flex; flex-direction:column; gap:7px; margin:12px 0; min-width:0; }
+.yt-plugin-dialog .yt-input,.yt-plugin-dialog .yt-select,.yt-plugin-dialog .yt-textarea { font:inherit; color:var(--yt-text); background:var(--yt-panel); border:1px solid var(--yt-line); border-radius:8px; min-height:44px; padding:10px; width:100%; min-width:0; margin:0; }
+.yt-plugin-dialog .yt-textarea { resize:vertical; }
+.yt-plugin-dialog .yt-toggle-row { display:flex; gap:12px; align-items:center; min-height:48px; cursor:pointer; }
+.yt-plugin-dialog input[type=checkbox] { accent-color:var(--yt-accent); flex:none; width:18px; height:18px; margin:0; }
+.yt-plugin-dialog .yt-empty { padding:20px 0; }
+.yt-plugin-confirm { max-width:480px; }
+.yt-plugin-dialog :focus-visible,.yt-native-entry:focus-visible { outline:2px solid var(--yt-accent,var(--SmartThemeQuoteColor,#c8b994)); outline-offset:2px; }
+/* Menu anchors and extension drawers inherit native layout, color and opacity. */
+.yt-plugin-settings .inline-drawer-content { padding-top:8px; }
+@media(max-width:600px) {
+ .yt-plugin-dialog { width:calc(100vw - 16px); max-width:calc(100vw - 16px); max-height:calc(100dvh - 20px); border-radius:12px; }
+ .yt-plugin-header { padding:14px 16px; }
+ .yt-plugin-content { padding:16px; }
+ .yt-plugin-dialog .yt-grid { grid-template-columns:1fr; gap:4px; }
+ .yt-plugin-dialog .yt-inline>.yt-button { flex:1 1 auto; }
+ .yt-plugin-dialog .yt-input,.yt-plugin-dialog .yt-select,.yt-plugin-dialog .yt-textarea { font-size:16px; }
+}
