@@ -5,9 +5,10 @@ import { createSettings, MENU_CHOICES, EXTENSION_DEFAULTS, USER_SECTIONS } from 
 import { createController } from './controller.js';
 
 export async function createInterfaceApp() {
-  const host=createHost(),panel=createPanel('yt-interface-dialog','界面整理',{version:'0.2.2'});
+  const host=createHost(),panel=createPanel('yt-interface-dialog','砚台总库',{version:'0.2.3'});
+  const CONTROL_REGISTRY_KEY = Symbol.for('yantai.control.registry.v1');
   let controller,applyChanges=true,alive=true,query='',rowNumber=0;
-  const opened=new Set(['menus']);
+  const opened=new Set(['control','menus']);
   const settings=createSettings(host,()=>{if(applyChanges)controller?.apply();});
   function update(patch,apply=true){
     applyChanges=apply;
@@ -16,6 +17,56 @@ export async function createInterfaceApp() {
     finally{applyChanges=true;}
   }
   controller=createController(settings.get,update,host);
+  function controlModules() {
+    const registry = globalThis[CONTROL_REGISTRY_KEY];
+    const registered = registry?.modules instanceof Map ? [...registry.modules.values()] : [];
+    const known = new Map(registered.map(item => [String(item?.id || ''), item]));
+    if (!known.has('yantai-interface')) known.set('yantai-interface', {
+      id:'yantai-interface', label:'界面整理', version:'0.2.3', schemaVersion:1,
+      inspect:()=>({ installed:true, enabled:settings.get().enabled !== false, health:'ok', sources:[{kind:'host-settings',namespace:'yantaiInterface',scope:'host',portable:'partial',readable:true,writable:true}], checks:[{id:'settings',label:'界面整理设置',status:'ok',detail:'当前总控设置可读'}] }),
+      setEnabled: async value => { change({enabled:Boolean(value)}); controller.apply(); return Boolean(value); },
+    });
+    for (const [id,label] of [['yantai-persona-studio','人设库与人设助手'],['yantai-bookshelf','角色书架'],['yantai-memory','叙事记忆']]) if (!known.has(id)) known.set(id, { id, label, installed:false, health:'unknown', inspect:()=>({ installed:false, enabled:false, health:'unknown', sources:[], checks:[{id:'bridge',label:'统一诊断桥',status:'unknown',detail:'模块已预留，尚未接入总控诊断'}] }) });
+    return [...known.values()].map(module => {
+      try { return { ...module, status: typeof module.inspect === 'function' ? module.inspect(host.context?.()) : { installed:false, health:'unknown', sources:[], checks:[] } }; }
+      catch (error) { return { ...module, status:{ installed:true, health:'error', sources:[], checks:[{id:'inspect',label:'诊断读取',status:'error',detail:error.message || '读取失败'}] } }; }
+    });
+  }
+  function controlSection() {
+    const cap=host.capabilities(), chat=host.currentChat(), modules=controlModules();
+    const section=sectionFactory('control','总控状态','这里只读检查酒馆来源和各模块数据来源，不会自动迁移、覆盖或删除内容。',`${modules.length} 个模块`);
+    const environment=node('div',undefined,'yt-if-control-environment');
+    const add=(label,value,detail='')=>{const cell=node('div',undefined,'yt-if-control-cell');cell.append(node('small',label),node('strong',value),detail?node('span',detail):null);environment.append(cell);};
+    add('当前酒馆',globalThis.location?.origin || '当前来源未知','当前页面来源');
+    add('当前聊天',chat?.name || '未打开聊天',chat?.id ? `ID ${String(chat.id).slice(0,36)}` : '');
+    add('宿主能力',Object.entries(cap).filter(([,value])=>value).map(([key])=>key).join(' · ') || '待检测','只读探测');
+    section.body.append(environment);
+    const list=node('div',undefined,'yt-if-control-modules');
+    for(const item of modules){
+      const status=item.status || {}, card=node('article',undefined,'yt-if-control-module');
+      const title=node('div',undefined,'yt-if-control-module-head');
+      const health=String(status.health || item.health || 'unknown');
+      title.append(node('strong',item.label || item.id),node('span',health==='ok'?'正常':health==='degraded'?'需处理':health==='error'?'读取失败':'未接入','yt-if-health yt-if-health-'+health));
+      if (typeof item.setEnabled === 'function' && status.installed !== false) {
+        const toggleWrap=node('label',undefined,'yt-if-control-toggle'), toggle=node('input');
+        toggle.type='checkbox'; toggle.checked=status.enabled !== false; toggle.setAttribute('aria-label',`启用${item.label || item.id}`);
+        toggle.addEventListener('change',async()=>{
+          toggle.disabled=true;
+          try { await item.setEnabled(toggle.checked); host.toast(`${item.label || item.id}${toggle.checked?'已启用':'已关闭'}。`,'success'); }
+          catch(error){ toggle.checked=!toggle.checked; host.toast(error?.message || '开关未能保存，请刷新后重试。','error'); }
+          finally { toggle.disabled=false; if(panel.dialog.open) render(); }
+        });
+        toggleWrap.append(toggle,node('span',toggle.checked?'已启用':'已关闭')); title.append(toggleWrap);
+      }
+      const checks=Array.isArray(status.checks)?status.checks:[];
+      const sourceText=(Array.isArray(status.sources)?status.sources:[]).map(source=>`${source.kind || '数据'} · ${source.portable==='no'?'本设备':source.portable==='partial'?'部分可移植':'可移植'}`).join('；') || '暂无数据来源说明';
+      card.append(title,node('p',sourceText,'yt-muted'));
+      if(checks.length){const ul=node('ul',undefined,'yt-if-control-checks');for(const check of checks.slice(0,4))ul.append(node('li',`${check.label || check.id}: ${check.detail || (check.status || '未知')}`));card.append(ul);}
+      list.append(card);
+    }
+    section.body.append(list);
+    return section.e;
+  }
   function change(patch){update(patch);render();}
   function changeChoice(key,value,checked){const set=new Set(settings.get()[key]);checked?set.add(value):set.delete(value);change({[key]:[...set]});}
   function toggle(label,checked,fn,detail){
@@ -24,13 +75,14 @@ export async function createInterfaceApp() {
     const copy=node('span');copy.append(node('span',label));if(detail)copy.append(node('small',detail));
     wrap.append(check,copy);wrap.dataset.search=(label+' '+(detail||'')).toLowerCase();return wrap;
   }
-  function section(key,title,description,count){
+  function sectionFactory(key,title,description,count){
     const e=node('details',undefined,'yt-if-category');e.dataset.category=key;e.open=opened.has(key);
     const summary=node('summary'),copy=node('span');copy.append(node('strong',title));if(count)copy.append(node('small',count));summary.append(copy);
     const body=node('div',undefined,'yt-if-category-body');body.append(node('p',description,'yt-muted'));
     e.append(summary,body);e.addEventListener('toggle',()=>{if(e.isConnected&&!query){e.open?opened.add(key):opened.delete(key);}});
     e.dataset.search=(title+' '+description).toLowerCase();return {e,body};
   }
+  const section = sectionFactory;
   function filterSections(){
     const word=query.trim().toLowerCase();
     for(const e of panel.content.querySelectorAll('.yt-if-category')){
@@ -49,6 +101,8 @@ export async function createInterfaceApp() {
     if(!alive)return;
     const target=panel.content,scroll=target.scrollTop,focused=document.activeElement?.id;
     const s=settings.get();target.replaceChildren();rowNumber=0;
+    target.append(node('p','砚台总库以界面整理为核心，只读显示各模块来源和健康状态；存档同步继续由酒馆原生管理。','yt-muted'));
+    target.append(controlSection());
     target.append(node('p','按按钮所在的位置整理界面。只收起入口和设置区域，插件仍会运行；需要停用插件时，请到「扩展 → 管理扩展」。','yt-muted'));
     if(document.getElementById('yantai-dialog'))target.append(node('p','旧版砚台仍在运行，可能同时调整界面。请先停用旧版并刷新。','yt-notice'));
     target.append(toggle('开启界面整理',s.enabled,checked=>change({enabled:checked})));
@@ -106,7 +160,9 @@ export async function createInterfaceApp() {
     if(focused?.startsWith('yt-if-setting-'))document.getElementById(focused)?.focus({preventScroll:true});
   }
   function open(){controller.apply();panel.open();render();}
-  const entries=installEntries({id:'yt-interface',label:'界面整理',glyph:'fa-sliders',order:90,open,host,extraActions:[['恢复原界面',restore]]});
+  const entries=installEntries({id:'yt-interface',label:'砚台总库',glyph:'fa-layer-group',order:90,open,host,extraActions:[['恢复原界面',restore]]});
   document.addEventListener('yantai:interface:open',open);
-  return {open,close:panel.close,settings,controller,restore,destroy(){alive=false;controller.destroy();entries.destroy();document.removeEventListener('yantai:interface:open',open);panel.destroy();}};
+  const updateControl=()=>{ if(panel.dialog.open) render(); };
+  globalThis.addEventListener?.('yantai:control:updated',updateControl);
+  return {open,close:panel.close,settings,controller,restore,destroy(){alive=false;controller.destroy();entries.destroy();document.removeEventListener('yantai:interface:open',open);globalThis.removeEventListener?.('yantai:control:updated',updateControl);panel.destroy();}};
 }

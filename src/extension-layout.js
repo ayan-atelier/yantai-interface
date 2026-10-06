@@ -6,14 +6,62 @@ import { extensionRank } from './extension-order.js';
 export const extensionStyles = `
 .extensions_block.yt-if-extension-layout,#rm_extensions_block.yt-if-extension-layout{
   display:flex!important;flex-direction:column!important;align-items:stretch!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
 }
-.yt-if-extension-layout>.yt-if-extension-column{display:contents!important}
+.yt-if-extension-layout>.yt-if-extension-column{display:contents!important;width:100%!important;max-width:100%!important;min-width:0!important}
 .yt-if-extension-layout>.yt-if-extension-column>.yt-if-extension-row{
-  flex:0 0 auto!important;width:100%!important;max-width:100%!important;min-width:0!important;margin-inline:0!important;
+  flex:0 0 auto!important;width:100%!important;max-width:100%!important;min-width:0!important;margin-inline:0!important;box-sizing:border-box!important;
 }
 .yt-if-extension-layout>.yt-if-extension-prefix,.yt-if-extension-layout>.yt-if-extension-suffix{width:100%!important}
+.yt-if-extension-layout>.yt-if-extension-group{
+  flex:0 0 auto!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
 .yt-if-extension-hidden,.yt-if-extension-vacant{display:none!important}
 .yt-if-extras-row #extensions_connect{width:auto!important;white-space:nowrap!important;min-width:3.5em;}
+
+/* TauriTavern and narrow mobile webviews can retain the desktop flex rules
+   used by the native regex editor. Keep the editor inside the available
+   viewport and let its action row wrap instead of widening the whole page. */
+@media (max-width:600px), (pointer:coarse) and (max-width:1200px){
+  .yt-if-extension-layout,
+  .yt-if-extension-layout > .yt-if-extension-column,
+  .yt-if-extension-layout > .yt-if-extension-prefix,
+  .yt-if-extension-layout > .yt-if-extension-suffix,
+  .yt-if-extension-layout > .yt-if-extension-column > .yt-if-extension-row{
+    width:100%!important;max-width:100%!important;min-width:0!important;
+  }
+  .yt-if-extension-layout #regex_container,
+  .yt-if-extension-layout #regex_container .inline-drawer-content,
+  .yt-if-extension-layout #regex_container .flex-container{
+    width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout #regex_container .flex-container{
+    display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:6px!important;
+  }
+  .yt-if-extension-layout #regex_container .flex-container > *{
+    min-width:0!important;max-width:100%!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout #regex_container input,
+  .yt-if-extension-layout #regex_container select,
+  .yt-if-extension-layout #regex_container textarea{
+    max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout .inline-drawer-header{
+    min-width:0!important;overflow-wrap:anywhere;
+  }
+  .yt-if-extension-layout .inline-drawer-content{
+    min-width:0!important;max-width:100%!important;overflow-x:hidden;
+  }
+  .yt-if-extension-layout > .yt-if-extension-column > .yt-if-extension-row{
+    margin-block:3px!important;
+  }
+  .yt-if-extension-layout .inline-drawer-header{
+    min-height:40px!important;padding:8px 10px!important;
+  }
+  .yt-if-extension-layout .inline-drawer-content{
+    padding-inline:10px!important;
+  }
+}
 `;
 
 // Both original columns remain in place, including their children and delegated
@@ -22,13 +70,13 @@ export function createExtensionLayout(get,update) {
   const classes=createClassOwner(),styles=createStyleOwner();
   let group=null,lastChoices=[];
   function removeGroup(){group?.box.remove();group=null;}
-  function ensureGroup(root){
-    if(group?.box.parentElement===root)return group;
+  function ensureGroup(parent){
+    if(group?.box.parentElement===parent)return group;
     removeGroup();
     const box=node('div',undefined,'yt-if-extension-group inline-drawer');box.id='yt-if-more-extensions';
     const header=node('div',undefined,'inline-drawer-toggle inline-drawer-header yt-if-extension-header');
     header.role='button';header.tabIndex=0;
-    const label=node('b'),icon=node('div');header.append(label,icon);box.append(header);root.prepend(box);
+    const label=node('b'),icon=node('div');header.append(label,icon);box.append(header);parent.prepend(box);
     header.addEventListener('click',event=>{
       event.preventDefault();event.stopImmediatePropagation();
       update({extensionsExpanded:!get().extensionsExpanded},false);apply(lastChoices);
@@ -67,7 +115,10 @@ export function createExtensionLayout(get,update) {
     const extras=s.foldExtras?extrasRows(parent,roots):[];
     const count=selected.length+(extras.length?1:0);
     if(count){
-      const current=ensureGroup(roots[0]);
+      // Keep the synthetic group at the same flex level as the two native
+      // columns. Some TT/WebView builds do not promote children of a
+      // display:contents column for cross-column ordering.
+      const current=ensureGroup(parent);
       const copy='更多扩展设置（'+count+'）';
       if(current.label.textContent!==copy)current.label.textContent=copy;
       current.header.setAttribute('aria-expanded',String(s.extensionsExpanded));
@@ -78,6 +129,10 @@ export function createExtensionLayout(get,update) {
     }else removeGroup();
     let pastColumns=false;
     for(const child of parent.children){
+      if(child===group?.box){
+        wantStyle(geometry,child,{order:'100',flex:'0 0 auto',width:'100%','max-width':'100%','min-width':'0'});
+        continue;
+      }
       if(roots.includes(child)){pastColumns=true;continue;}
       wantClass(wanted,child,pastColumns?'yt-if-extension-suffix':'yt-if-extension-prefix');
       wantStyle(geometry,child,{order:pastColumns?'9000':'0',width:'100%'});

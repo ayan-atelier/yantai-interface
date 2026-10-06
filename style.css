@@ -14,6 +14,20 @@
 .yt-if-extension-header:focus-visible { outline:2px solid var(--SmartThemeQuoteColor,#c8b994);outline-offset:2px; }
 .yt-plugin-dialog .yt-if-choices { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 16px; }
 #yt-interface-dialog .yt-section { margin-top:24px; }
+.yt-if-control-environment{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0;}
+.yt-if-control-cell{display:flex;flex-direction:column;gap:3px;min-width:0;padding:10px 11px;border:1px solid var(--yt-line);border-radius:8px;background:color-mix(in srgb,var(--yt-panel,#fff) 55%,transparent);}
+.yt-if-control-cell small,.yt-if-control-cell span{color:var(--yt-muted);font-size:.82em;overflow-wrap:anywhere;}
+.yt-if-control-cell strong{font-size:.92em;overflow-wrap:anywhere;}
+.yt-if-control-modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.yt-if-control-module{padding:11px 12px;border:1px solid var(--yt-line);border-radius:8px;min-width:0;}
+.yt-if-control-module-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.yt-if-control-module-head strong{overflow-wrap:anywhere;}
+.yt-if-control-toggle{display:flex;align-items:center;gap:6px;color:var(--yt-muted);font-size:.82em;white-space:nowrap;}
+.yt-if-control-toggle input{accent-color:var(--yt-accent,#d9a7b8);}
+.yt-if-health{flex:none;padding:2px 7px;border-radius:999px;font-size:.78em;white-space:nowrap;}
+.yt-if-health-ok{color:#5cae78;background:#5cae7822;}.yt-if-health-degraded{color:#c89540;background:#c8954022;}.yt-if-health-error{color:#d46c6c;background:#d46c6c22;}.yt-if-health-unknown{color:var(--yt-muted);background:var(--yt-line);}
+.yt-if-control-checks{margin:7px 0 0;padding-left:1.1em;color:var(--yt-muted);font-size:.86em;line-height:1.5;}
+@media(max-width:560px){.yt-if-control-environment,.yt-if-control-modules{grid-template-columns:1fr;}}
 #options.yt-if-menu { max-height:72vh; max-height:72dvh; overflow-y:auto; overscroll-behavior:contain; }
 #options .yt-native-tools { border-top:1px solid var(--SmartThemeBorderColor,#7775); margin-top:5px; padding-top:5px; }
 #options .yt-native-tools-panel { display:flex; flex-direction:column; }
