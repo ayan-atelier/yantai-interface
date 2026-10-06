@@ -21,6 +21,31 @@ export async function createInterfaceApp() {
     const registry = globalThis[CONTROL_REGISTRY_KEY];
     const registered = registry?.modules instanceof Map ? [...registry.modules.values()] : [];
     const known = new Map(registered.map(item => [String(item?.id || ''), item]));
+    // Older/isolated shelf builds may not expose the shared registry even though
+    // the shelf is running. Reuse its native setting as a safe compatibility
+    // bridge so the total-control switch still works across load orders.
+    if (!known.has('yantai-bookshelf')) {
+      const context = globalThis.SillyTavern?.getContext?.();
+      const shelfSettings = context?.extensionSettings?.['yantai-bookshelf'];
+      const shelfCheckbox = document.querySelector('#jd-bookshelf-settings input[type="checkbox"]');
+      const shelfInstalled = Boolean(shelfSettings || shelfCheckbox || document.querySelector('#jd-bookshelf-open'));
+      if (shelfInstalled) known.set('yantai-bookshelf', {
+        id:'yantai-bookshelf', label:'角色书架', version:'1.4.4', schemaVersion:1, namespace:'yantaiBookshelf',
+        inspect:()=>({ installed:true, enabled:shelfSettings?.enabled !== false && shelfCheckbox?.checked !== false, health:'ok',
+          sources:[{kind:'host-settings',namespace:'yantaiBookshelf',scope:'host',portable:'partial',readable:true,writable:true}],
+          checks:[{id:'settings',label:'书架设置',status:'ok',detail:'已接入现有书架设置'}] }),
+        setEnabled:async value=>{
+          const enabled=Boolean(value);
+          const liveContext=globalThis.SillyTavern?.getContext?.();
+          const liveSettings=liveContext?.extensionSettings?.['yantai-bookshelf'];
+          if (liveSettings) { liveSettings.enabled=enabled; liveContext.saveSettingsDebounced?.(); }
+          const liveCheckbox=document.querySelector('#jd-bookshelf-settings input[type="checkbox"]');
+          if (liveCheckbox && liveCheckbox.checked!==enabled) liveCheckbox.click();
+          globalThis.dispatchEvent?.(new CustomEvent('yantai:control:updated'));
+          return enabled;
+        },
+      });
+    }
     if (!known.has('yantai-interface')) known.set('yantai-interface', {
       id:'yantai-interface', label:'界面整理', version:'0.2.3', schemaVersion:1,
       inspect:()=>({ installed:true, enabled:settings.get().enabled !== false, health:'ok', sources:[{kind:'host-settings',namespace:'yantaiInterface',scope:'host',portable:'partial',readable:true,writable:true}], checks:[{id:'settings',label:'界面整理设置',status:'ok',detail:'当前总控设置可读'}] }),
