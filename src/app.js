@@ -5,7 +5,7 @@ import { createSettings, MENU_CHOICES, EXTENSION_DEFAULTS, USER_SECTIONS } from 
 import { createController } from './controller.js';
 
 export async function createInterfaceApp() {
-  const host=createHost(),panel=createPanel('yt-interface-dialog','界面整理',{version:'0.3.1'});
+  const host=createHost(),panel=createPanel('yt-interface-dialog','界面整理',{version:'0.3.0'});
   let controller,applyChanges=true,alive=true,query='',rowNumber=0;
   const opened=new Set(['menus']);
   const settings=createSettings(host,()=>{if(applyChanges)controller?.apply();});
