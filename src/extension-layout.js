@@ -35,8 +35,23 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container .flex-container{
     width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
   }
-  .yt-if-extension-layout #regex_container .flex-container{
+  /* Keep the native regex script rows intact.  The native template uses
+     `.regex-script-label.flexnowrap` for the title/actions row; applying the
+     mobile wrapping rule to every descendant flex container makes the action
+     controls fall into several vertical columns on small screens. */
+  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap){
     display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:6px!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label{
+    display:flex!important;flex-wrap:nowrap!important;align-items:baseline!important;gap:0!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label > .flex-container:last-child{
+    width:auto!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;
+    flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label .regex_script_buttons{
+    width:auto!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;
+    flex-wrap:nowrap!important;gap:0!important;
   }
   .yt-if-extension-layout #regex_container .flex-container > *{
     min-width:0!important;max-width:100%!important;box-sizing:border-box!important;
