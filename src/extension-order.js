@@ -8,9 +8,7 @@ const systemIds=[
   'emulatorjs_container','idle_container','hypebot_container','randomizer_container','chromadb_container',
   'message_limit_container','injects_container','accuweather_container','dice_container'
 ];
-// These are UI rows, not loading-order identifiers. Keep the local/cloud
-// handoff row before memory and the interface shell; bookshelf stays last.
-const yantaiIds=['yt-sync-settings','yt-memory-settings','yt-interface-settings','jd-bookshelf-settings'];
+const yantaiIds=['yt-interface-settings','jd-bookshelf-settings','yt-memory-settings'];
 
 export function entryKind(choice){
   const id=choice.element.id;
