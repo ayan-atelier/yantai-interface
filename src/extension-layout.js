@@ -14,6 +14,50 @@ export const extensionStyles = `
 .yt-if-extension-layout>.yt-if-extension-prefix,.yt-if-extension-layout>.yt-if-extension-suffix{width:100%!important}
 .yt-if-extension-hidden,.yt-if-extension-vacant{display:none!important}
 .yt-if-extras-row #extensions_connect{width:auto!important;white-space:nowrap!important;min-width:3.5em;}
+
+/* Keep the native regex editor inside a narrow phone viewport. The title and
+   action row must stay intact; wrapping that row makes each native card grow
+   vertically and separates its controls on mobile. */
+@media (max-width:600px), (pointer:coarse) and (max-width:1200px){
+  .yt-if-extension-layout,
+  .yt-if-extension-layout > .yt-if-extension-column,
+  .yt-if-extension-layout > .yt-if-extension-prefix,
+  .yt-if-extension-layout > .yt-if-extension-suffix,
+  .yt-if-extension-layout > .yt-if-extension-column > .yt-if-extension-row{
+    width:100%!important;max-width:100%!important;min-width:0!important;
+  }
+  .yt-if-extension-layout #regex_container,
+  .yt-if-extension-layout #regex_container .inline-drawer-content,
+  .yt-if-extension-layout #regex_container .flex-container{
+    width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap){
+    display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:6px!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label{
+    display:flex!important;flex-wrap:nowrap!important;align-items:baseline!important;gap:0!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label > .flex-container:last-child,
+  .yt-if-extension-layout #regex_container .regex-script-label .regex_script_buttons{
+    width:auto!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;
+    flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
+  }
+  .yt-if-extension-layout #regex_container .flex-container > *{
+    min-width:0!important;max-width:100%!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout #regex_container input,
+  .yt-if-extension-layout #regex_container select,
+  .yt-if-extension-layout #regex_container textarea{
+    max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout .inline-drawer-header{
+    min-width:0!important;overflow-wrap:anywhere;min-height:40px!important;padding:8px 10px!important;
+  }
+  .yt-if-extension-layout .inline-drawer-content{
+    min-width:0!important;max-width:100%!important;overflow-x:hidden;padding-inline:10px!important;
+  }
+  .yt-if-extension-layout > .yt-if-extension-column > .yt-if-extension-row{margin-block:3px!important;}
+}
 `;
 
 // Both original columns remain in place, including their children and delegated
