@@ -40,13 +40,7 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container .regex-script-label > .flex-container:last-child,
   .yt-if-extension-layout #regex_container .regex-script-label .regex_script_buttons{
     width:auto!important;max-width:100%!important;min-width:0!important;flex:0 1 auto!important;
-    flex-wrap:nowrap!important;align-items:center!important;gap:4px!important;
-  }
-  .yt-if-extension-layout #regex_container .regex-script-label .regex_script_buttons{
-    gap:8px!important;
-  }
-  .yt-if-extension-layout #regex_container .regex_script_buttons > .menu_button{
-    flex:0 0 auto!important;
+    flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
   }
   .yt-if-extension-layout #regex_container .flex-container > *{
     min-width:0!important;max-width:100%!important;box-sizing:border-box!important;
