@@ -58,6 +58,9 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container .regex_script_buttons{
     flex:0 0 auto!important;gap:5px!important;
   }
+  .yt-if-extension-layout #regex_container .regex-script-label > .flex-container:last-child > .regex_script_buttons{
+    flex:0 0 max-content!important;width:max-content!important;min-width:max-content!important;max-width:none!important;
+  }
   .yt-if-extension-layout #regex_container .regex-script-label > .flex-container:last-child > .menu_button,
   .yt-if-extension-layout #regex_container .regex_script_buttons > .menu_button{
     flex:0 0 auto!important;

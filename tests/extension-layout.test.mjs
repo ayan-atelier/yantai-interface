@@ -8,5 +8,6 @@ test('keeps native regex title and actions together on narrow screens', () => {
   assert.match(extensionStyles, /\.regex-script-label\{[\s\S]*?flex-wrap:nowrap!important/);
   assert.match(extensionStyles, /\.regex_script_buttons\{[\s\S]*?flex-wrap:nowrap!important/);
   assert.match(extensionStyles, /#regex_container\{[\s\S]*?display:block!important;overflow-x:hidden!important/);
+  assert.match(extensionStyles, /\.regex-script-label > \.flex-container:last-child > \.regex_script_buttons\{[\s\S]*?width:max-content!important/);
   assert.match(extensionStyles, /#regex_container input,[\s\S]*?#regex_container textarea/);
 });
