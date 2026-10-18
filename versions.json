@@ -1,8 +1,15 @@
 {
   "schema": 1,
   "extension": "yantai-interface",
-  "latest": "0.2.9",
+  "latest": "0.2.10",
   "releases": [
+    {
+      "version": "0.2.10",
+      "branch": "main",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "砚台 · 界面整理稳定版。更新检测策略与人设馆、角色书架保持一致；系统扩展页负责手动更新，插件内版本与更新入口保留用于回退和分支切换。"
+    },
     {
       "version": "0.2.9",
       "branch": "main",
