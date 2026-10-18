@@ -3,10 +3,12 @@ import { createPanel, node, button } from '../shared/ui.js';
 import { installEntries } from '../shared/entries.js';
 import { createSettings, MENU_CHOICES, EXTENSION_DEFAULTS, USER_SECTIONS } from './settings.js';
 import { createController } from './controller.js';
+import { INTERFACE_VERSION, createVersionManager } from '../versions.js';
+import { openVersionDialog } from '../version-ui.js';
 
 export async function createInterfaceApp() {
-  const host=createHost(),panel=createPanel('yt-interface-dialog','界面整理',{version:'0.2.2'});
-  let controller,applyChanges=true,alive=true,query='',rowNumber=0;
+  const host=createHost(),panel=createPanel('yt-interface-dialog','界面整理',{version:INTERFACE_VERSION});
+  let controller,versionManager,versionDialogHandle,applyChanges=true,alive=true,query='',rowNumber=0;
   const opened=new Set(['menus']);
   const settings=createSettings(host,()=>{if(applyChanges)controller?.apply();});
   function update(patch,apply=true){
@@ -45,6 +47,26 @@ export async function createInterfaceApp() {
     update({enabled:false,hiddenTop:[],foldMenu:false,foldPresets:false,hiddenWand:[],foldExtensions:false,foldUserSettings:false});
     if(panel.dialog.open)render();host.toast('已恢复原来的入口和设置显示。','success');
   }
+  function versionDialog(title){
+    const modal=createPanel('yt-interface-version-dialog','界面整理 · '+title,{version:INTERFACE_VERSION});
+    const notice=node('p','');notice.className='yt-notice';modal.content.append(notice);
+    modal.dialog.addEventListener('close',()=>modal.destroy(),{once:true});
+    modal.open();
+    return {modal:modal.dialog,body:modal.content,notice};
+  }
+  function showVersionManager(){
+    versionManager ||= createVersionManager({
+      settings:()=>settings.get(),
+      save:async()=>{host.context()?.saveSettingsDebounced?.();},
+      flush:async()=>{host.context()?.saveSettingsDebounced?.();await new Promise(resolve=>setTimeout(resolve,250));},
+      context:()=>host.context(),
+      apiRoot:new URL('../../../../../',import.meta.url),
+      moduleURL:new URL('../index.js',import.meta.url),
+      currentVersion:INTERFACE_VERSION,
+      beforeChange:async()=>panel.close(),
+    });
+    versionDialogHandle=openVersionDialog({manager:versionManager,element:(tag,className='',text='')=>node(tag,text,className),button:(text,className,action)=>button(text,action,'yt-button '+className),dialog:versionDialog,currentVersion:INTERFACE_VERSION,notify:message=>host.toast(message,'error'),refresh:async()=>{host.context()?.saveSettingsDebounced?.();location.reload();}});
+  }
   function render(){
     if(!alive)return;
     const target=panel.content,scroll=target.scrollTop,focused=document.activeElement?.id;
@@ -53,7 +75,7 @@ export async function createInterfaceApp() {
     if(document.getElementById('yantai-dialog'))target.append(node('p','旧版砚台仍在运行，可能同时调整界面。请先停用旧版并刷新。','yt-notice'));
     target.append(toggle('开启界面整理',s.enabled,checked=>change({enabled:checked})));
     const actions=node('div',undefined,'yt-inline');
-    actions.append(button('恢复原界面',restore),button('重新识别入口',()=>{controller.apply();render();host.toast('已重新读取当前菜单和扩展列表。','success');}));target.append(actions);
+    actions.append(button('恢复原界面',restore),button('重新识别入口',()=>{controller.apply();render();host.toast('已重新读取当前菜单和扩展列表。','success');}),button('版本与更新',showVersionManager));target.append(actions);
     const search=node('input',undefined,'yt-input yt-if-search');search.type='search';search.placeholder='搜索设置项或插件名称';search.setAttribute('aria-label','搜索界面整理设置');search.id='yt-if-search';search.value=query;
     search.addEventListener('input',()=>{query=search.value;filterSections();});target.append(search);
 
@@ -106,7 +128,7 @@ export async function createInterfaceApp() {
     if(focused?.startsWith('yt-if-setting-'))document.getElementById(focused)?.focus({preventScroll:true});
   }
   function open(){controller.apply();panel.open();render();}
-  const entries=installEntries({id:'yt-interface',label:'界面整理',glyph:'fa-sliders',order:90,open,host,extraActions:[['恢复原界面',restore]]});
+  const entries=installEntries({id:'yt-interface',label:'界面整理',glyph:'fa-sliders',order:90,open,host,extraActions:[['恢复原界面',restore],['版本与更新',showVersionManager]]});
   document.addEventListener('yantai:interface:open',open);
-  return {open,close:panel.close,settings,controller,restore,destroy(){alive=false;controller.destroy();entries.destroy();document.removeEventListener('yantai:interface:open',open);panel.destroy();}};
+  return {open,close:panel.close,settings,controller,restore,destroy(){alive=false;versionDialogHandle?.close();versionManager?.dispose();controller.destroy();entries.destroy();document.removeEventListener('yantai:interface:open',open);panel.destroy();}};
 }

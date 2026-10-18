@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "extension": "yantai-interface",
+  "latest": "0.2.8",
+  "releases": [
+    {
+      "version": "0.2.8",
+      "branch": "main",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "砚台 · 界面整理稳定版。增加版本与更新入口，可检查更新、回退到兼容稳定版并在切换前备份设置；保留手机端正则布局修复。"
+    },
+    {
+      "version": "0.2.7",
+      "branch": "v0.2.7",
+      "commit": "cb5a32c1fc839d70d350ebf546b96f7ca9dde8f3",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "砚台 · 界面整理稳定版。修复手机端展开正则卡片时的操作栏宽度、横向溢出和卡片高度问题。"
+    },
+    {
+      "version": "0.2.6",
+      "branch": "v0.2.6",
+      "commit": "3b2826a",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "修复手机端正则列表横向溢出。"
+    },
+    {
+      "version": "0.2.5",
+      "branch": "v0.2.5",
+      "commit": "0094eab",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "恢复经过验证的手机端正则操作栏布局。"
+    },
+    {
+      "version": "0.2.4",
+      "branch": "v0.2.4",
+      "commit": "55dc37a",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "手机端正则操作栏间距实验版。"
+    },
+    {
+      "version": "0.2.3",
+      "branch": "v0.2.3",
+      "commit": "4e7ac62",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "手机端正则编辑器布局修复版。"
+    },
+    {
+      "version": "0.2.2",
+      "branch": "v0.2.2",
+      "commit": "39eb716",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "界面整理首个公开稳定版。"
+    }
+  ]
+}

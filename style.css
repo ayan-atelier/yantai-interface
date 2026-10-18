@@ -1,4 +1,7 @@
 @import url('./shared/ui.css');
+.yt-plugin-dialog .yt-if-version-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:14px 0; }
+.yt-plugin-dialog .yt-if-version-notes { white-space:pre-wrap; padding:12px 14px; border:1px solid var(--yt-line); border-radius:var(--yt-radius); background:var(--yt-panel); min-height:2.5em; }
+.yt-plugin-dialog .yt-if-version-help { display:block; color:var(--yt-muted); line-height:1.6; }
 .yt-plugin-dialog .yt-if-setting { display:flex; gap:12px; align-items:center; min-height:48px; padding:10px 0; cursor:pointer; }
 .yt-if-setting>span { display:flex; flex-direction:column; gap:4px; }
 .yt-if-setting small { color:var(--yt-muted); line-height:1.5; }
@@ -24,6 +27,7 @@
 .yt-if-fold-button[hidden] { display:none!important; }
 .yt-if-fold-button:focus-visible { outline:2px solid var(--SmartThemeQuoteColor,#c8b994); outline-offset:2px; }
 @media(max-width:420px){.yt-plugin-dialog .yt-if-choices{grid-template-columns:1fr;}}
+@media(max-width:600px){.yt-plugin-dialog .yt-if-version-actions>.yt-button{flex:1 1 140px;}}
 /* Native .menu_button uses min-content: bare Chinese labels shrink to one
    character per line. Keep these two actions horizontal and wrap whole buttons. */
 #yt-interface-settings .inline-drawer-content>.flex-container{
