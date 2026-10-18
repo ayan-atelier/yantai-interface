@@ -31,16 +31,22 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container .flex-container{
     width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
   }
-  /* The native regex row uses display:contents; give it a real containing
-     block on phones so its drawer cannot size itself against the outer panel. */
+  /* Keep a real containing block so the mobile drawer stays within the
+     viewport; the script-list reset below prevents collapsed rows from
+     inheriting the drawer's expanded height. */
   .yt-if-extension-layout #regex_container{
     display:block!important;overflow-x:hidden!important;
   }
-  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap){
+  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap):not(.regex-script-container){
     display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:6px!important;
   }
+  .yt-if-extension-layout #regex_container .regex-script-container{
+    display:flex!important;flex-flow:column nowrap!important;align-items:stretch!important;
+    align-content:flex-start!important;gap:6px!important;height:auto!important;min-height:0!important;
+  }
   .yt-if-extension-layout #regex_container .regex-script-label{
-    display:flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
+    display:flex!important;flex:0 0 auto!important;height:auto!important;min-height:0!important;
+    flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
   }
   .yt-if-extension-layout #regex_container .regex-script-label > .regex_script_name{
     flex:1 1 0%!important;min-width:0!important;overflow:hidden!important;
