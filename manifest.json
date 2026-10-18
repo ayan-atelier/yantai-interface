@@ -6,9 +6,9 @@
   "js": "index.js",
   "css": "style.css",
   "author": "阿砚 × 泊舟（Codex）",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "minimum_client_version": "1.16.0",
-  "auto_update": false,
+  "auto_update": true,
   "hooks": {
     "enable": "onEnable",
     "disable": "onDisable"

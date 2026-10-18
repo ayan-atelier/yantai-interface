@@ -1,8 +1,15 @@
 {
   "schema": 1,
   "extension": "yantai-interface",
-  "latest": "0.2.8",
+  "latest": "0.2.9",
   "releases": [
+    {
+      "version": "0.2.9",
+      "branch": "main",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "砚台 · 界面整理更新检测版。加入酒馆扩展更新检测，发现 GitHub 新提交时显示更新入口；实际更新仍由用户点击确认。"
+    },
     {
       "version": "0.2.8",
       "branch": "main",
