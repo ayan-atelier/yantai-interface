@@ -28,8 +28,11 @@ export const extensionStyles = `
   }
   .yt-if-extension-layout #regex_container,
   .yt-if-extension-layout #regex_container .inline-drawer-content,
-  .yt-if-extension-layout #regex_container .flex-container{
+  .yt-if-extension-layout #regex_container .flex-container:not(.checkbox):not(.bai-bai-regex-group-title):not(.regex_script_buttons){
     width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+  }
+  .yt-if-extension-layout #regex_container .checkbox.flex-container{
+    width:auto!important;max-width:none!important;flex:0 0 auto!important;
   }
   /* Keep a real containing block so the mobile drawer stays within the
      viewport; the script-list reset below prevents collapsed rows from
@@ -37,14 +40,48 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container{
     display:block!important;overflow-x:hidden!important;
   }
-  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap):not(.regex-script-container){
+  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap):not(.regex-script-container):not(.flexFlowColumn):not(.bai-bai-regex-group-body):not(.regex_bulk_operations):not(.checkbox):not([hidden]):not(.displayNone){
     display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:6px!important;
   }
   .yt-if-extension-layout #regex_container .regex-script-container{
     display:flex!important;flex-flow:column nowrap!important;align-items:stretch!important;
     align-content:flex-start!important;gap:6px!important;height:auto!important;min-height:0!important;
   }
-  .yt-if-extension-layout #regex_container .regex-script-label{
+  .yt-if-extension-layout #regex_container .bai-bai-regex-vue-list,
+  .yt-if-extension-layout #regex_container .bai-bai-regex-groups,
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group,
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-list{
+    flex-flow:column nowrap!important;height:auto!important;min-height:0!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group{
+    flex:0 0 auto!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-header{
+    display:flex!important;flex:0 0 auto!important;height:auto!important;min-height:0!important;
+    flex-wrap:nowrap!important;align-items:center!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-title{
+    width:auto!important;flex:1 1 0%!important;min-width:0!important;
+    flex-wrap:nowrap!important;align-items:baseline!important;overflow:hidden!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-name{
+    min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-header > .menu_button,
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-toggle{
+    flex:0 0 auto!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-framed > .bai-bai-regex-group-body{
+    display:grid!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-collapsed > .bai-bai-regex-group-body{
+    display:grid!important;grid-template-rows:0fr!important;height:auto!important;min-height:0!important;
+  }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-collapsed .bai-bai-regex-group-body-inner,
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-collapsed .bai-bai-regex-group-list{
+    min-height:0!important;height:0!important;overflow:hidden!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label:not(.pcm-ng-hidden):not([hidden]){
     display:flex!important;flex:0 0 auto!important;height:auto!important;min-height:0!important;
     flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
   }

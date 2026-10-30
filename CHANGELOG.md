@@ -1,5 +1,12 @@
 # 更新记录
 
+## 0.2.11
+
+- 修复手机端与柏宝箱（`ST-BaiBai-Tools`）、酒馆盒子（`wkwk-yushe`）等正则分组插件的布局冲突：
+  - 修复收起分组后由于 `display: grid` 被覆盖为 `display: flex` 导致出现大块透明空白框的问题；
+  - 修复内层开关容器（`.checkbox.flex-container`）被强制 `width: 100%` 导致分组标题与数量被挤压至 0 宽度消失、以及预设/局部正则总开关被挤到下一行的问题；
+  - 修复酒馆盒子收起分组条目（`.pcm-ng-hidden`）及原生批量操作栏（`.regex_bulk_operations`）的显隐状态被覆盖的问题。
+
 ## 0.2.10
 
 - 将 `auto_update` 恢复为关闭，与人设馆和角色书架保持一致。

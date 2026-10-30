@@ -13,11 +13,11 @@ import fs from 'node:fs';
 const catalog = JSON.parse(fs.readFileSync(new URL('../versions.json', import.meta.url), 'utf8'));
 
 test('interface release metadata is valid and sortable', () => {
-  assert.equal(INTERFACE_VERSION, '0.2.10');
+  assert.equal(INTERFACE_VERSION, '0.2.11');
   assert.equal(compareVersions('0.2.8', '0.2.7'), 1);
   assert.equal(compareVersions('0.2.8-dev1', '0.2.8'), -1);
   assert.equal(repositoryURL('https://github.com/ayan-atelier/yantai-interface/'), 'https://github.com/ayan-atelier/yantai-interface');
-  assert.equal(releaseCatalog(catalog).latest, '0.2.10');
+  assert.equal(releaseCatalog(catalog).latest, '0.2.11');
   assert.throws(() => repositoryURL('https://github.com/ayan-atelier/yantai-interface?x=1'), /仓库网址/);
 });
 
@@ -45,7 +45,7 @@ test('main branch updates use Tavern update endpoint and verify manifest', async
     if (url.endsWith('/version')) return body({ pkgVersion: '1.16.0' });
     if (url.endsWith('/api/extensions/branches')) return body([{ name: 'main', commit: targetCommit }, { name: 'origin/main', commit: targetCommit }]);
     if (url.endsWith('/api/extensions/update')) { updateCalls++; return body({ shortCommitHash: targetCommit.slice(0, 7) }); }
-    if (url.endsWith('/manifest.json')) return body({ version: '0.2.10' });
+    if (url.endsWith('/manifest.json')) return body({ version: '0.2.11' });
     if (url.includes('raw.githubusercontent.com/ayan-atelier/yantai-interface/main/versions.json')) return body(catalog);
     throw new Error(`unexpected request ${url}`);
   };
@@ -61,7 +61,7 @@ test('main branch updates use Tavern update endpoint and verify manifest', async
     currentVersion: '0.2.6',
   });
   const checked = await manager.check();
-  assert.equal(checked.latest.version, '0.2.10');
+  assert.equal(checked.latest.version, '0.2.11');
   assert.equal(checked.latest.branch, 'main');
   await manager.apply(checked, checked.latest);
   assert.equal(updateCalls, 1);

@@ -1,8 +1,15 @@
 {
   "schema": 1,
   "extension": "yantai-interface",
-  "latest": "0.2.10",
+  "latest": "0.2.11",
   "releases": [
+    {
+      "version": "0.2.11",
+      "branch": "main",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "修复手机端与柏宝箱、酒馆盒子等正则分组插件的布局冲突：修复折叠分组出现大块空白区域、分组标题与数量被挤压消失、预设/局部正则总开关被挤换行及原生批量操作栏异常显示的问题。"
+    },
     {
       "version": "0.2.10",
       "branch": "main",
