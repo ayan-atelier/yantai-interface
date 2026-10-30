@@ -28,7 +28,7 @@ export const extensionStyles = `
   }
   .yt-if-extension-layout #regex_container,
   .yt-if-extension-layout #regex_container .inline-drawer-content,
-  .yt-if-extension-layout #regex_container .flex-container:not(.checkbox):not(.bai-bai-regex-group-title):not(.regex_script_buttons){
+  .yt-if-extension-layout #regex_container .flex-container{
     width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
   }
   .yt-if-extension-layout #regex_container .checkbox.flex-container{
@@ -40,7 +40,7 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container{
     display:block!important;overflow-x:hidden!important;
   }
-  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap):not(.regex-script-container):not(.flexFlowColumn):not(.bai-bai-regex-group-body):not(.regex_bulk_operations):not(.checkbox):not([hidden]):not(.displayNone){
+  .yt-if-extension-layout #regex_container .flex-container:not(.regex-script-label):not(.regex_script_buttons):not(.flexnowrap):not(.regex-script-container):where(:not(.flexFlowColumn):not(.bai-bai-regex-group-body):not(.bai-bai-regex-group-title):not(.regex_bulk_operations):not(.checkbox):not([hidden]):not(.displayNone)){
     display:flex!important;flex-wrap:wrap!important;align-items:stretch!important;gap:6px!important;
   }
   .yt-if-extension-layout #regex_container .regex-script-container{
@@ -60,6 +60,7 @@ export const extensionStyles = `
     display:flex!important;flex:0 0 auto!important;height:auto!important;min-height:0!important;
     flex-wrap:nowrap!important;align-items:center!important;
   }
+  .yt-if-extension-layout #regex_container .bai-bai-regex-group-title.flex-container,
   .yt-if-extension-layout #regex_container .bai-bai-regex-group-title{
     width:auto!important;flex:1 1 0%!important;min-width:0!important;
     flex-wrap:nowrap!important;align-items:baseline!important;overflow:hidden!important;
@@ -81,9 +82,13 @@ export const extensionStyles = `
   .yt-if-extension-layout #regex_container .bai-bai-regex-group-collapsed .bai-bai-regex-group-list{
     min-height:0!important;height:0!important;overflow:hidden!important;
   }
-  .yt-if-extension-layout #regex_container .regex-script-label:not(.pcm-ng-hidden):not([hidden]){
+  .yt-if-extension-layout #regex_container .regex-script-label:where(:not(.pcm-ng-hidden):not([hidden])){
     display:flex!important;flex:0 0 auto!important;height:auto!important;min-height:0!important;
     flex-wrap:nowrap!important;align-items:center!important;gap:0!important;
+  }
+  .yt-if-extension-layout #regex_container .regex-script-label > .drag-handle,
+  .yt-if-extension-layout #regex_container .regex-script-label > .menu-handle{
+    flex:0 0 auto!important;
   }
   .yt-if-extension-layout #regex_container .regex-script-label > .regex_script_name{
     flex:1 1 0%!important;min-width:0!important;overflow:hidden!important;

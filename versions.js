@@ -1,5 +1,5 @@
 /* Explicit, user-triggered release switching for the native interface extension. */
-export const INTERFACE_VERSION = '0.2.11';
+export const INTERFACE_VERSION = '0.2.12';
 export const INTERFACE_ID = 'yantai-interface';
 export const SETTINGS_SCHEMA = 1;
 export const DEFAULT_REPOSITORY = 'https://github.com/ayan-atelier/yantai-interface';

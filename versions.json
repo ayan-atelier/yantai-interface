@@ -1,14 +1,21 @@
 {
   "schema": 1,
   "extension": "yantai-interface",
-  "latest": "0.2.11",
+  "latest": "0.2.12",
   "releases": [
+    {
+      "version": "0.2.12",
+      "branch": "main",
+      "settings_schema": 1,
+      "minimum_client_version": "1.16.0",
+      "notes": "修复 0.2.11 中 CSS :not() 选择器优先级过高导致手机端原生正则卡片标题被操作栏挤压隐藏的问题；同时完整保留柏宝箱、酒馆盒子分组折叠与标题显示修复。"
+    },
     {
       "version": "0.2.11",
       "branch": "main",
       "settings_schema": 1,
       "minimum_client_version": "1.16.0",
-      "notes": "修复手机端与柏宝箱、酒馆盒子等正则分组插件的布局冲突：修复折叠分组出现大块空白区域、分组标题与数量被挤压消失、预设/局部正则总开关被挤换行及原生批量操作栏异常显示的问题。"
+      "notes": "修复手机端与柏宝箱、酒馆盒子等正则分组插件的布局冲突。"
     },
     {
       "version": "0.2.10",
